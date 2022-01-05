@@ -7,7 +7,7 @@ Run-PrinterDiagnostics is a small portable CLI utility to troubleshoot printers 
 
 Clear and Restart Print Spooler
 
-Enable / View Print Service Opearional Event Logs
+Enable / View Print Service Operational Event Logs
 
 Print Test Page
 
