@@ -4,7 +4,6 @@
 	 Created with: 	SAPIEN Technologies, Inc., PowerShell Studio 2021 v5.8.195
 	 Created on:   	1/5/2022 8:55 AM
 	 Created by:   	David Just
-	 Organization: 	NTIVA
 	 Filename: Run-PrinterDiagnostics 
 	 Version: 1.0
 	===========================================================================
