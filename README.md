@@ -15,5 +15,11 @@ Open Add Printer Dialogue
 
 Open Printer Settings
 
+# Usage
+
+Download pre-compiled exe
+Run
+Select menu options. Fix printing. Profit.
+
 Feel free to contribute! 
 
