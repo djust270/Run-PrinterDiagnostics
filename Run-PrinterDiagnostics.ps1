@@ -5,7 +5,7 @@
 	 Created on:   	1/5/2022 8:55 AM
 	 Created by:   	David Just
 	 Filename: Run-PrinterDiagnostics 
-	 Version: 1.0.3
+	 Version: 1.0.4
 	===========================================================================
 	.DESCRIPTION
 		Utility for basic printer diagnostics and troubleshooting
@@ -77,7 +77,7 @@ function RestartSpooler #Clears and restarts print spooler service.
 {
 	Write-Host "Restarting Print Spooler..." -ForegroundColor White -BackgroundColor Black
 	$scriptblock = @'
-Get-Service Spooler | Stop-Service ; cmd /c "del %systemroot%\System32\spool\printers* /Q" ; Get-Service Spooler | Start-Service
+Get-Service Spooler | Stop-Service -force ; cmd /c "del %systemroot%\System32\spool\printers* /Q" ; Get-Service Spooler | Start-Service
 '@
 	$bytes = [System.Text.Encoding]::Unicode.GetBytes($scriptblock)
 	$encodedCommand = [Convert]::ToBase64String($bytes)
@@ -139,9 +139,23 @@ function PrintTestPage
 
 function OpenPrinterCP
 {
-	Start-Process ms-settings:printers
-	Clear-Host
-	MainMenu
+	param (
+	[String]$Option	
+	)
+	switch ($Option)
+	{
+		Modern {
+			Start-Process ms-settings:printers
+			Clear-Host
+			MainMenu
+		}
+		Classic {
+			Start-Process control printers
+			Clear-Host
+			MainMenu
+		}
+	}
+	
 }
 
 
@@ -155,16 +169,17 @@ function MainMenu
 	Write-Host "Installed Printers:"
 	$printers | select Name, Portname, Drivername | Format-Table -AutoSize
 	Write-Host "Main Menu"
-	Write-Host "Options: `n[1] Review Print Service Logs`n[2] Restart and Clear Print Spooler`n[3] Add a new printer`n[4] Open Printer Control Panel`n[5] Print Test Page`n[6] Quit" -ForegroundColor Cyan -BackgroundColor Black
+	Write-Host "Options: `n[1] Review Print Service Logs`n[2] Restart and Clear Print Spooler`n[3] Add a new printer`n[4] Open Classic Printer Control Panel`n[5] Open Modern Printer Settings Page`n[6] Print Test Page`n[7] Quit" -ForegroundColor Cyan -BackgroundColor Black
 	$MenuSelection = Read-Host "Please Enter A Selection"
 	switch ($MenuSelection)
 	{
 		1{ FetchPrintLogs } #Review Print Logs
 		2{ RestartSpooler } #Restart and Clear Spooler
 		3{ cmd /c "C:\Windows\System32\rundll32.exe PRINTUI.DLL, PrintUIEntry /im" } #Add a new printer
-		4{ OpenPrinterCP }
-		5{ PrintTestPage }
-		6{ Write-Host "Thank you for using the Print Diagnostic Tool. Happy Printing!"; sleep 2; break } #Quit
+		4{ OpenPrinterCP -Option Classic }
+		5{ OpenPrinterCP -Option Modern }
+		6{ PrintTestPage }
+		7{ Write-Host "Thank you for using the Print Diagnostic Tool. Happy Printing!"; sleep 2; break } #Quit
 	}
 	
 	
