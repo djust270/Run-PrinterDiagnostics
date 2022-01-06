@@ -13,20 +13,18 @@
 ####### Variables ##########
 $PrintServiceLog = Get-WinEvent -Listlog "Microsoft-Windows-PrintService/Operational"
 $printers=Get-Printer | Where-Object {$_.name -notlike "*Microsoft*" -and $_.name -notlike "*Fax*" -and $_.name -notlike "*OneNote*"}
+$currentUser=whoami
 ############################
 
 ###### Functions ##########
 
 function Welcome
 {
-	$currentUser = $env:USERNAME
-	
+		
 	Write-Host "####################################################################################################"
 	Write-Host "Run-PrintDiagNostics Version 1.0`nAuthor: David Just" -ForegroundColor DarkCyan -BackgroundColor Black
 	Write-Host "Welcome to the Printer Diagnostics Utility `nWhere we try to make printers slightly less painful! `nCurrently Running as $($env:USERNAME)" -ForegroundColor Green -BackgroundColor Black
 	Write-Host "#################################################################################################### `r"
-	Write-Host "Installed Printers:"
-	$printers | select Name, Portname, Drivername | Format-Table -AutoSize
 	if ($currentUser -like "*System*" -or $currentUser -like "*admin*")
 	{
 		Write-Warning "Caution, you are currently running as $($currentUser).`nYou must run this tool as the logged on user in order to work with shared printers`nRunning as SYSTEM or another user will only show system wide printers!"
@@ -50,7 +48,8 @@ $log=Get-WinEvent -ListLog 'Microsoft-Windows-PrintService/Operational';$log.IsE
 		sleep 2
 		if ((Get-WinEvent -Listlog "Microsoft-Windows-PrintService/Operational" | select -ExpandProperty IsEnabled))
 		{
-			Write-Host "Successfully Enabled Logging!" -ForegroundColor Green -BackgroundColor Black
+			Write-Host "Successfully Enabled Logging!`nPlease try to print a test page and check back for event logs.`n" -ForegroundColor Green -BackgroundColor Black
+			pause
 			Clear-Host
 			MainMenu
 		}
@@ -147,6 +146,11 @@ function OpenPrinterCP
 
 function MainMenu
 {
+	$log=Get-WinEvent -Listlog "Microsoft-Windows-PrintService/Operational" | select -ExpandProperty IsEnabled
+	if($log){$status='Enabled'}else{$status='Disabled'}
+	Write-Host "Printer Service Log Status: $($staus)" -Foregroundcolor DarkCyan -BackGroundColor Black
+	Write-Host "Installed Printers:"
+	$printers | select Name, Portname, Drivername | Format-Table -AutoSize
 	Write-Host "Main Menu"
 	Write-Host "Options: `n[1] Review Print Service Logs`n[2] Restart and Clear Print Spooler`n[3] Add a new printer`n[4] Open Printer Control Panel`n[5] Print Test Page`n[6] Quit" -ForegroundColor Cyan -BackgroundColor Black
 	$MenuSelection = Read-Host "Please Enter A Selection"
