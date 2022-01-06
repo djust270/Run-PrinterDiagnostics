@@ -148,7 +148,7 @@ function MainMenu
 {
 	$log=Get-WinEvent -Listlog "Microsoft-Windows-PrintService/Operational" | select -ExpandProperty IsEnabled
 	if($log){$status='Enabled'}else{$status='Disabled'}
-	Write-Host "Printer Service Log Status: $($staus)" -Foregroundcolor DarkCyan -BackGroundColor Black
+	Write-Host "Printer Service Log Status: $($status)" -Foregroundcolor DarkCyan -BackGroundColor Black
 	Write-Host "Installed Printers:"
 	$printers | select Name, Portname, Drivername | Format-Table -AutoSize
 	Write-Host "Main Menu"
