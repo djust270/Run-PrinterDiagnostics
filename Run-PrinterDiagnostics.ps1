@@ -5,7 +5,7 @@
 	 Created on:   	1/5/2022 8:55 AM
 	 Created by:   	David Just
 	 Filename: Run-PrinterDiagnostics 
-	 Version: 1.0.2
+	 Version: 1.0.3
 	===========================================================================
 	.DESCRIPTION
 		Utility for basic printer diagnostics and troubleshooting
@@ -118,7 +118,7 @@ function PrintTestPage
 	}
 	
 	$Selection = Read-Host "Select which printer to send a test page to"
-	$SelectedPrinter = $printer[$Selection - 1]
+	$SelectedPrinter = $printers[$Selection - 1]
 	$TestPrint = Invoke-CimMethod -MethodName printtestpage -InputObject (Get-CimInstance win32_printer | Where-Object { $_.name -like $SelectedPrinter.Name })
 	if ($TestPrint.ReturnValue -eq 0)
 	{
