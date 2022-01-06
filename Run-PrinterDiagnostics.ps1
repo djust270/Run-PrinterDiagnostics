@@ -27,7 +27,7 @@ function Welcome
 	Write-Host "#################################################################################################### `r"
 	Write-Host "Installed Printers:"
 	$printers | select Name, Portname, Drivername | Format-Table -AutoSize
-	if ($currentUser -like "*System*" -or $currentUser -like "*netlogicdc*")
+	if ($currentUser -like "*System*" -or $currentUser -like "*admin*")
 	{
 		Write-Warning "Caution, you are currently running as $($currentUser).`nYou must run this tool as the logged on user in order to work with shared printers`nRunning as SYSTEM or another user will only show system wide printers!"
 	}
