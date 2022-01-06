@@ -82,7 +82,7 @@ Get-Service Spooler | Stop-Service ; cmd /c "del %systemroot%\System32\spool\pri
 	Start-Process "Powershell.exe" -ArgumentList "-EncodedCommand $encodedCommand" -Verb runas
 	if ((Get-Service Spooler | select -ExpandProperty Status) -like "Running")
 	{
-		Write-Host "Successfully Restarted Spooler!" - ForegroundColor Green -BackgroundColor Black
+		Write-Host "Successfully Restarted Spooler!" -ForegroundColor Green -BackgroundColor Black
 		$Prompt = Read-Host "Would you like to print a test page? Y/N"
 		switch ($Prompt)
 		{
