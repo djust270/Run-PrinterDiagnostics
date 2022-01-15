@@ -1,11 +1,11 @@
-<#	
+﻿<#	
 	.NOTES
 	===========================================================================
 	 Created with: 	SAPIEN Technologies, Inc., PowerShell Studio 2021 v5.8.195
 	 Created on:   	1/5/2022 8:55 AM
 	 Created by:   	David Just
 	 Filename: Run-PrinterDiagnostics 
-	 Version: 1.0.4
+	 Version: 1.0.5
 	===========================================================================
 	.DESCRIPTION
 		Utility for basic printer diagnostics and troubleshooting
@@ -24,7 +24,7 @@ function Welcome
 {
 	
 	Write-Host "####################################################################################################"
-	Write-Host "Run-PrintDiagNostics Version 1.0`nAuthor: David Just" -ForegroundColor DarkCyan -BackgroundColor Black
+	Write-Host "Run-PrintDiagNostics Version 1.0.4`nAuthor: David Just" -ForegroundColor DarkCyan -BackgroundColor Black
 	Write-Host "Welcome to the Printer Diagnostics Utility `nWhere we try to make printers slightly less painful! `nCurrently Running as $($currentUser.toUpper())" -ForegroundColor Green -BackgroundColor Black
 	Write-Host "#################################################################################################### `r"
 	if (($activeUser -ne $currentUser))
@@ -117,7 +117,19 @@ function PrintTestPage
 		
 	}
 	
-	$Selection = Read-Host "Select which printer to send a test page to"
+	try
+	{
+		$Selection = Read-Host "Select which printer to send a test page to. Press Q to return to mainmenu" -ErrorAction 'Stop'
+		if ($Selection -like "Q") { MainMenu }
+		else {$Selection = [int]$Selection}
+		
+	}
+	Catch
+	{
+		Write-Host "Please enter a valid menu selection." -ForegroundColor Red -BackgroundColor Black
+		Pause
+		PrintTestPage
+	}
 	$SelectedPrinter = $printers[$Selection - 1]
 	$TestPrint = Invoke-CimMethod -MethodName printtestpage -InputObject (Get-CimInstance win32_printer | Where-Object { $_.name -like $SelectedPrinter.Name })
 	if ($TestPrint.ReturnValue -eq 0)
@@ -170,12 +182,22 @@ function MainMenu
 	$printers | select Name, Portname, Drivername | Format-Table -AutoSize
 	Write-Host "Main Menu"
 	Write-Host "Options: `n[1] Review Print Service Logs`n[2] Restart and Clear Print Spooler`n[3] Add a new printer`n[4] Open Classic Printer Control Panel`n[5] Open Modern Printer Settings Page`n[6] Print Test Page`n[7] Quit" -ForegroundColor Cyan -BackgroundColor Black
-	$MenuSelection = Read-Host "Please Enter A Selection"
+	try
+	{
+		[int]$MenuSelection = Read-Host "Please Enter A Selection" -ErrorAction 'Stop'
+	}
+	Catch
+	{		
+		Write-Host "Please select a menu option 1 - 7" -ForegroundColor Red -BackgroundColor Black
+		Pause
+		Clear-Host
+		MainMenu		
+	}
 	switch ($MenuSelection)
 	{
 		1{ FetchPrintLogs } #Review Print Logs
 		2{ RestartSpooler } #Restart and Clear Spooler
-		3{ cmd /c "C:\Windows\System32\rundll32.exe PRINTUI.DLL, PrintUIEntry /im" } #Add a new printer
+		3{ cmd /c "C:\Windows\System32\rundll32.exe PRINTUI.DLL, PrintUIEntry /im"; MainMenu } #Add a new printer
 		4{ OpenPrinterCP -Option Classic }
 		5{ OpenPrinterCP -Option Modern }
 		6{ PrintTestPage }
