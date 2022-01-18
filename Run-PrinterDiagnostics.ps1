@@ -24,7 +24,7 @@ function Welcome
 {
 	
 	Write-Host "####################################################################################################"
-	Write-Host "Run-PrintDiagNostics Version 1.0.4`nAuthor: David Just" -ForegroundColor DarkCyan -BackgroundColor Black
+	Write-Host "Run-PrintDiagNostics Version 1.0.5`nAuthor: David Just" -ForegroundColor DarkCyan -BackgroundColor Black
 	Write-Host "Welcome to the Printer Diagnostics Utility `nWhere we try to make printers slightly less painful! `nCurrently Running as $($currentUser.toUpper())" -ForegroundColor Green -BackgroundColor Black
 	Write-Host "#################################################################################################### `r"
 	if (($activeUser -ne $currentUser))
