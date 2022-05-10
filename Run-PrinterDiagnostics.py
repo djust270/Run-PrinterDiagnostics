@@ -75,7 +75,7 @@ def AddNewPrinter():
 def EndProgram():
     print("Thank you for using the python Print Diagnostic Tool. Happy Printing!")
     sleep(1)
-    #exit(0)
+    exit(0)
 
 def MainMenu():
     if printLogStatus == 'True':
