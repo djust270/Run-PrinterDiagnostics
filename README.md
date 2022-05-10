@@ -1,6 +1,6 @@
 # Run-PrinterDiagnostics
 Run-PrinterDiagnostics is a small portable CLI utility to troubleshoot printers on Windows.
-**This project is written using Windows PowerShell 5.1 and is available as a standalone executible. **
+**This project is written using Windows PowerShell 5.1 and now Python! This is available as a standalone executible. **
 
 ![Alt text](RunPrinterDiagnostics.PNG?raw=true "Run-PrinterDiagnostics.exe")
 # Features:
