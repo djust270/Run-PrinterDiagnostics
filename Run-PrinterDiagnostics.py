@@ -19,7 +19,7 @@ def prRed(skk): print("\033[91m {}\033[00m" .format(skk))
 def prPurple(skk): print("\033[95m {}\033[00m" .format(skk))
 def welcome():
     print("####################################################################################################")
-    prCyan("Run-PrintDiagnostics Version 1.0.5\n Author: David Just")
+    prCyan("Run-PrintDiagnostics Version 1.1, Now in Python!\n Author: David Just")
     prGreen(f"Welcome to the Printer Diagnostics Utility \n Where we try to make printers slightly less painful! \n Currently Running as {curUser.upper()}")
     print("#################################################################################################### \r")
     if activeUser != curUser:
