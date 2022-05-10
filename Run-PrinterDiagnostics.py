@@ -58,10 +58,11 @@ def PrintTestPage():
      selection = int(input("Select a printer to send a test page to:"))   
      index = int(selection - 1)
      selectedPrinter = str(wmiPrinters[index].DeviceID)
-     command = "Invoke-CimMethod -MethodName PrintTestPage -InputObject (Get-CimInstance win32_printer | where name " + '"' + selectedPrinter + '"' + ')'
+     command = "Invoke-CimMethod -MethodName PrintTestPage -InputObject (Get-CimInstance win32_printer | where name -like " + '"' + selectedPrinter + '"' + ')'
      encodedBytes = command.encode("utf-16LE")
      encodedStr = base64.b64encode(encodedBytes)
      subprocess.call("C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -encodedcommand " + encodedStr.decode())
+     MainMenu()	
      
 def OpenPrinterCP(Option):
 	switch = {
