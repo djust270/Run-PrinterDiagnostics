@@ -60,10 +60,12 @@ def PrintTestPage():
      subprocess.call("C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -encodedcommand " + encodedStr.decode())
      
 def OpenPrinterCP(Option):
-	switch = {
-        'Modern': os.system("cmd.exe /c \"start ms-settings:printers\""),
-        'Classic': os.system("cmd.exe /c \"start  control printers\"")
-    }
+    match Option :
+        case 'Modern': 
+            os.system("cmd.exe /c \"start ms-settings:printers\"")
+        case 'Classic': 
+            os.system("cmd.exe /c \"start  control printers\"")
+
 def AddNewPrinter():
     os.system("cmd.exe /c \"C:\\Windows\\System32\\rundll32.exe PRINTUI.DLL, PrintUIEntry /im\"")
 
