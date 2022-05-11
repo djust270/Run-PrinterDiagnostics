@@ -17,7 +17,7 @@ def prCyan(skk): print("\033[96m {}\033[00m" .format(skk))
 def prGreen(skk): print("\033[92m {}\033[00m" .format(skk))
 def prRed(skk): print("\033[91m {}\033[00m" .format(skk))
 def prPurple(skk): print("\033[95m {}\033[00m" .format(skk))
-def welcome():
+def Welcome():
     print("####################################################################################################")
     prCyan("Run-PrintDiagnostics Version 1.1, Now in Python!\n Author: David Just")
     prGreen(f"Welcome to the Printer Diagnostics Utility \n Where we try to make printers slightly less painful! \n Currently Running as {curUser.upper()}")
@@ -33,19 +33,15 @@ def FetchPrintLogs():
                 shell.ShellExecuteEx(lpVerb = 'runas', lpFile = 'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe', lpParameters="$log = Get-WinEvent -ListLog Microsoft-Windows-PrintService/Operational;$log.IsEnabled=$true;$log.SaveChanges()")
                 prGreen("Successfully Enabled Logging!\nPlease try to print a test page and check back for event logs.\n")
                 sleep(1)
-                MainMenu()
          except : 
                 print("Failed to enable log")
                 sleep(1)
-                MainMenu()
      else:
         os.system("powershell.exe -command \"Get-WinEvent -LogName Microsoft-Windows-PrintService/Operational | Out-GridView ; pause\"")
-        MainMenu()
 
 def RestartSpooler():
     print("Restarting Print Spooler...")
     shell.ShellExecuteEx(lpVerb = 'runas', lpFile = 'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe', lpParameters="Get-Service Spooler | Stop-Service -force ; cmd /c \"del %systemroot%\System32\spool\printers* /Q\" ; Get-Service Spooler | Start-Service")
-    MainMenu()
 
 def PrintTestPage():
      wmi_o = wmi.WMI('.')
@@ -62,7 +58,6 @@ def PrintTestPage():
      encodedBytes = command.encode("utf-16LE")
      encodedStr = base64.b64encode(encodedBytes)
      subprocess.call("C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -encodedcommand " + encodedStr.decode())
-     MainMenu()	
      
 def OpenPrinterCP(Option):
 	switch = {
@@ -71,7 +66,6 @@ def OpenPrinterCP(Option):
     }
 def AddNewPrinter():
     os.system("cmd.exe /c \"C:\\Windows\\System32\\rundll32.exe PRINTUI.DLL, PrintUIEntry /im\"")
-    MainMenu()
 
 def EndProgram():
     print("Thank you for using the python Print Diagnostic Tool. Happy Printing!")
@@ -110,6 +104,7 @@ def MainMenu():
         os.system("pause")
         MainMenu()
     
-            
-welcome()    
-MainMenu()
+        
+Welcome()    
+while "True":
+    MainMenu()

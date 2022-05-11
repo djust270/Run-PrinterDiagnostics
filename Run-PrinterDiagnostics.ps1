@@ -53,14 +53,12 @@ $log=Get-WinEvent -ListLog 'Microsoft-Windows-PrintService/Operational';$log.IsE
 			Write-Host "Successfully Enabled Logging!`nPlease try to print a test page and check back for event logs.`n" -ForegroundColor Green -BackgroundColor Black
 			pause
 			Clear-Host
-			MainMenu
 		}
 		else
 		{
 			Write-Host "Failed to enable Print Service Operation Log!"
 			sleep 2
 			Clear-Host
-			MainMenu
 		}
 		
 	}
@@ -68,7 +66,6 @@ $log=Get-WinEvent -ListLog 'Microsoft-Windows-PrintService/Operational';$log.IsE
 	{
 		Get-WinEvent -LogName "Microsoft-Windows-PrintService/Operational" | Out-GridView
 		Clear-Host
-		MainMenu
 	}
 	
 }
@@ -94,14 +91,12 @@ Get-Service Spooler | Stop-Service -force ; cmd /c "del %systemroot%\System32\sp
 		}
 		sleep 1
 		Clear-Host
-		MainMenu
 	}
 	else
 	{
 		Write-Warning "Spooler service is not running!"
 		sleep 2
 		Clear-Host
-		MainMenu
 	}
 }
 
@@ -120,7 +115,7 @@ function PrintTestPage
 	try
 	{
 		$Selection = Read-Host "Select which printer to send a test page to. Press Q to return to mainmenu" -ErrorAction 'Stop'
-		if ($Selection -like "Q") { MainMenu }
+		if ($Selection -like "Q") { return }
 		else {$Selection = [int]$Selection}
 		
 	}
@@ -137,13 +132,11 @@ function PrintTestPage
 		Write-Host "Test Page Sent Successfully! `n" -ForegroundColor Green -BackgroundColor Green
 		sleep 1
 		Clear-Host
-		MainMenu
 	}
 	else
 	{
 		Write-Host "Test page failed!" -ForegroundColor Red -BackgroundColor Green
-		sleep 2
-		MainMenu
+		sleep 1
 	}
 	
 	
@@ -159,12 +152,10 @@ function OpenPrinterCP
 		Modern {
 			Start-Process ms-settings:printers
 			Clear-Host
-			MainMenu
 		}
 		Classic {
 			Start-Process control printers
 			Clear-Host
-			MainMenu
 		}
 	}
 	
@@ -190,23 +181,23 @@ function MainMenu
 	{		
 		Write-Host "Please select a menu option 1 - 7" -ForegroundColor Red -BackgroundColor Black
 		Pause
-		Clear-Host
-		MainMenu		
+		Clear-Host		
 	}
 	switch ($MenuSelection)
 	{
 		1{ FetchPrintLogs } #Review Print Logs
 		2{ RestartSpooler } #Restart and Clear Spooler
-		3{ cmd /c "C:\Windows\System32\rundll32.exe PRINTUI.DLL, PrintUIEntry /im"; MainMenu } #Add a new printer
+		3{ cmd /c "C:\Windows\System32\rundll32.exe PRINTUI.DLL, PrintUIEntry /im"; return } #Add a new printer
 		4{ OpenPrinterCP -Option Classic }
 		5{ OpenPrinterCP -Option Modern }
 		6{ PrintTestPage }
-		7{ Write-Host "Thank you for using the Print Diagnostic Tool. Happy Printing!"; sleep 2; break } #Quit
+		7{ Write-Host "Thank you for using the Print Diagnostic Tool. Happy Printing!"; sleep 1; exit } #Quit
 	}
-	
-	
+		
 }
 
 Welcome
 sleep 1
+while ($true){
 MainMenu
+}
