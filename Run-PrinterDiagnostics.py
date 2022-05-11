@@ -99,7 +99,7 @@ def MainMenu():
                 PrintTestPage()
             case 7: 
                 EndProgram()
-    except:
+    except ValueError:
         prRed("Please enter a valid selection")
         os.system("pause")
         MainMenu()
